@@ -13,7 +13,17 @@ const CreateArticle = () => {
     <Container className="pt-6">
       <FormTitle title="create article" />
 
-      <ArticleForm />
+      <ArticleForm
+        onSubmit={(data) => {
+          console.log("data", data);
+        }}
+        categories={[
+          {
+            title: "one",
+            slug: "one",
+          },
+        ]}
+      />
     </Container>
   );
 };

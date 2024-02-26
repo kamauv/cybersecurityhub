@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import {
   Select,
   SelectContent,
@@ -38,31 +38,46 @@ const FormSchema = z.object({
   }),
 });
 
-const ArticleForm = () => {
+interface Props {
+  onSubmit: ({
+    username,
+    categorySlug,
+    content,
+  }: {
+    username: string;
+    categorySlug: string;
+    content: string;
+  }) => void;
+  initialData?: {
+    username: string;
+    categorySlug: string;
+    content: string;
+  };
+  categories: {
+    title: string;
+    slug: string;
+  }[];
+}
+
+const ArticleForm = ({ onSubmit, initialData, categories }: Props) => {
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      username: "",
-      categorySlug: "",
-      content: "",
+      username: initialData ? initialData.username : "",
+      categorySlug: initialData ? initialData.categorySlug : "",
+      content: initialData ? initialData.content : "",
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+  function onFormSubmit(data: z.infer<typeof FormSchema>) {
+    onSubmit(data);
   }
 
   return (
     <Card className="p-4">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className=" space-y-6">
+        <form onSubmit={form.handleSubmit(onFormSubmit)} className=" space-y-6">
           <FormField
             control={form.control}
             name="username"
@@ -79,7 +94,7 @@ const ArticleForm = () => {
 
           <FormField
             control={form.control}
-            name="username"
+            name="categorySlug"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Category</FormLabel>
@@ -93,9 +108,13 @@ const ArticleForm = () => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="m@example.com">m@example.com</SelectItem>
-                    <SelectItem value="m@google.com">m@google.com</SelectItem>
-                    <SelectItem value="m@support.com">m@support.com</SelectItem>
+                    {categories && categories.length > 0
+                      ? categories.map((category, index) => (
+                          <SelectItem key={category.slug} value={category.slug}>
+                            {category.title}
+                          </SelectItem>
+                        ))
+                      : "No categories found"}
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -110,11 +129,7 @@ const ArticleForm = () => {
               <FormItem>
                 <FormLabel>Content</FormLabel>
                 <FormControl>
-                  <Textarea
-                    placeholder="Tell us a little bit about yourself"
-                    rows={5}
-                    {...field}
-                  />
+                  <Textarea placeholder="Article content" rows={5} {...field} />
                 </FormControl>
 
                 <FormMessage />

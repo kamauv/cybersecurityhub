@@ -15,15 +15,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 
 const FormSchema = z.object({
@@ -32,29 +23,29 @@ const FormSchema = z.object({
   }),
 });
 
-const CategoryForm = () => {
+interface Props {
+  onSubmit: ({ category }: { category: string }) => void;
+  initialData?: {
+    category: string;
+  };
+}
+
+const CategoryForm = ({ onSubmit, initialData }: Props) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      category: "",
+      category: initialData ? initialData.category : "",
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+  function onFormSubmit(data: z.infer<typeof FormSchema>) {
+    onSubmit(data);
   }
 
   return (
     <Card className="p-4">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className=" space-y-6">
+        <form onSubmit={form.handleSubmit(onFormSubmit)} className=" space-y-6">
           <FormField
             control={form.control}
             name="category"
