@@ -13,7 +13,7 @@ const NavLink = ({ href, title, isActive }: Props) => {
     <Link
       href={href}
       className={cn(
-        "font-semibold hover:text-primary",
+        "font-semibold hover:text-primary text-sm",
         isActive && "text-primary"
       )}
     >
