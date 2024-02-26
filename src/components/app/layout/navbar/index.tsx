@@ -51,13 +51,35 @@ const Navbar = () => {
             <DropdownMenuTrigger className="text-sm font-semibold">
               Admin
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="right-0">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Billing</DropdownMenuItem>
-              <DropdownMenuItem>Team</DropdownMenuItem>
-              <DropdownMenuItem>Subscription</DropdownMenuItem>
+            <DropdownMenuContent className="">
+              <DropdownMenuItem>
+                <NavLink
+                  href="/admin"
+                  isActive={pathname == "/admin"}
+                  title="Home"
+                />
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <NavLink
+                  href="/admin/categories"
+                  isActive={pathname == "/admin/categories"}
+                  title="Categories"
+                />
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <NavLink
+                  href="/admin/create-article"
+                  isActive={pathname == "/admin/create-article"}
+                  title="Create Article"
+                />
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <NavLink
+                  href="/admin/create-category"
+                  isActive={pathname == "/admin/create-category"}
+                  title="Create Category"
+                />
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
