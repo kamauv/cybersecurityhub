@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { CircleDashed, RocketIcon } from "lucide-react";
 
 const FormSchema = z.object({
   category: z.string().min(2, {
@@ -28,9 +30,16 @@ interface Props {
   initialData?: {
     category: string;
   };
+  submissionError?: string;
+  isFormSubmitting?: boolean;
 }
 
-const CategoryForm = ({ onSubmit, initialData }: Props) => {
+const CategoryForm = ({
+  onSubmit,
+  initialData,
+  submissionError,
+  isFormSubmitting,
+}: Props) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -44,6 +53,14 @@ const CategoryForm = ({ onSubmit, initialData }: Props) => {
 
   return (
     <Card className="p-4">
+      {submissionError && (
+        <Alert variant={"destructive"}>
+          <RocketIcon className="h-4 w-4" />
+          <AlertTitle>Error creating category</AlertTitle>
+          <AlertDescription>{submissionError}</AlertDescription>
+        </Alert>
+      )}
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onFormSubmit)} className=" space-y-6">
           <FormField
@@ -60,7 +77,13 @@ const CategoryForm = ({ onSubmit, initialData }: Props) => {
             )}
           />
 
-          <Button type="submit">Submit</Button>
+          <Button disabled={isFormSubmitting} type="submit">
+            {isFormSubmitting ? (
+              <CircleDashed className="animate-spin" />
+            ) : (
+              "Submit"
+            )}
+          </Button>
         </form>
       </Form>
     </Card>

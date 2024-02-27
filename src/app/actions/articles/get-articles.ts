@@ -1,4 +1,4 @@
-"use client";
+"use server";
 
 import prisma from "@/lib/prismaDB";
 
@@ -17,6 +17,9 @@ export async function getArticles({ categorySlug, searchString }: Props) {
         slug: {
           contains: categorySlug,
         },
+      },
+      include: {
+        category: true,
       },
     });
 

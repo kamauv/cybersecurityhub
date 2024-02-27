@@ -7,6 +7,7 @@ interface Props {
   title: string;
   categorySlug: string;
   imageURL?: string;
+  content: string;
 }
 
 export async function updateArticle({
@@ -14,6 +15,7 @@ export async function updateArticle({
   title,
   categorySlug,
   imageURL,
+  content,
 }: Props) {
   // check if the article exists
   try {
@@ -49,6 +51,7 @@ export async function updateArticle({
       data: {
         title,
         imageURL,
+        content,
         category: {
           connect: {
             slug: categorySlug,

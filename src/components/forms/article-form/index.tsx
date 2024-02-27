@@ -25,10 +25,12 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { CircleDashed, RocketIcon } from "lucide-react";
 
 const FormSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+  title: z.string().min(2, {
+    message: "title must be at least 2 characters.",
   }),
   categorySlug: z.string().min(2, {
     message: "Category must be selected .",
@@ -40,16 +42,16 @@ const FormSchema = z.object({
 
 interface Props {
   onSubmit: ({
-    username,
+    title,
     categorySlug,
     content,
   }: {
-    username: string;
+    title: string;
     categorySlug: string;
     content: string;
   }) => void;
   initialData?: {
-    username: string;
+    title: string;
     categorySlug: string;
     content: string;
   };
@@ -57,14 +59,22 @@ interface Props {
     title: string;
     slug: string;
   }[];
+  submissionError?: string;
+  isFormSubmitting?: boolean;
 }
 
-const ArticleForm = ({ onSubmit, initialData, categories }: Props) => {
+const ArticleForm = ({
+  onSubmit,
+  initialData,
+  categories,
+  submissionError,
+  isFormSubmitting,
+}: Props) => {
   const { toast } = useToast();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      username: initialData ? initialData.username : "",
+      title: initialData ? initialData.title : "",
       categorySlug: initialData ? initialData.categorySlug : "",
       content: initialData ? initialData.content : "",
     },
@@ -76,11 +86,18 @@ const ArticleForm = ({ onSubmit, initialData, categories }: Props) => {
 
   return (
     <Card className="p-4">
+      {submissionError && (
+        <Alert variant={"destructive"}>
+          <RocketIcon className="h-4 w-4" />
+          <AlertTitle>Error creating category</AlertTitle>
+          <AlertDescription>{submissionError}</AlertDescription>
+        </Alert>
+      )}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onFormSubmit)} className=" space-y-6">
           <FormField
             control={form.control}
-            name="username"
+            name="title"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Title</FormLabel>
@@ -110,7 +127,11 @@ const ArticleForm = ({ onSubmit, initialData, categories }: Props) => {
                   <SelectContent>
                     {categories && categories.length > 0
                       ? categories.map((category, index) => (
-                          <SelectItem key={category.slug} value={category.slug}>
+                          <SelectItem
+                            className="capitalize"
+                            key={category.slug}
+                            value={category.slug}
+                          >
                             {category.title}
                           </SelectItem>
                         ))
@@ -137,7 +158,13 @@ const ArticleForm = ({ onSubmit, initialData, categories }: Props) => {
             )}
           />
 
-          <Button type="submit">Submit</Button>
+          <Button disabled={isFormSubmitting} type="submit">
+            {isFormSubmitting ? (
+              <CircleDashed className="animate-spin" />
+            ) : (
+              "submit"
+            )}
+          </Button>
         </form>
       </Form>
     </Card>

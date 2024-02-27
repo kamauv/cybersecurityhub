@@ -10,7 +10,7 @@ interface Props {
   imageURL?: string;
 }
 
-export async function createProject({
+export async function createArticle({
   title,
   content,
   categorySlug,
@@ -18,6 +18,31 @@ export async function createProject({
 }: Props) {
   // creating the articles slug
   const articleSlug = slugifyString(title);
+  // check if the category exist
+
+  try {
+    const checkCategory = await prisma.category.findFirst({
+      where: {
+        slug: categorySlug,
+      },
+    });
+
+    if (!checkCategory) {
+      return {
+        isSuccess: false,
+        error: "Category does not exist",
+        data: null,
+      };
+    }
+  } catch (error) {
+    console.error("CHECK_CATEGORY_ERROR : ", error);
+
+    return {
+      isSuccess: false,
+      error: "Internal server error",
+      data: null,
+    };
+  }
 
   // checking if the article with that slug exists
   try {

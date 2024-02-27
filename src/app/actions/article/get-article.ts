@@ -12,6 +12,9 @@ export async function getArticle({ articleSlug }: Props) {
       where: {
         slug: articleSlug,
       },
+      include: {
+        category: true,
+      },
     });
 
     if (!article) {
