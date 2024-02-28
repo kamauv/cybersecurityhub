@@ -14,11 +14,12 @@ datasource db {
 }
 
 model Article {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  title    String
-  slug     String  @unique
-  content  String
-  imageURL String?
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  title      String
+  slug       String  @unique
+  content    String
+  imageURL   String?
+  isFeatured Boolean @default(false)
 
   category   Category @relation(fields: [categoryId], references: [id])
   categoryId String   @db.ObjectId

@@ -21,11 +21,12 @@ const SingleArticleCard = ({
   return (
     <>
       <Card className="overflow-hidden hover:shadow-md group">
-        <Link href={""}>
+        <Link href={`/article/${articleSlug}`}>
           <ImageContainer
             alt="image"
             imageURL={imageURL ? imageURL : "/placeholder.webp"}
             ratio={1 / 1}
+            object="cover"
           />
         </Link>
         <div className="py-2 px-2">
@@ -34,7 +35,7 @@ const SingleArticleCard = ({
               href={`/category/${categorySlug}`}
               className="hover:underline"
             >
-              <small>{categoryName}</small>
+              <small className="capitalize">{categoryName}</small>
             </Link>
           </div>
           <Link href={`/article/${articleSlug}`}>

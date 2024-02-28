@@ -8,6 +8,15 @@ export async function getCategories({}: Props) {
   try {
     const categories = await prisma.category.findMany({
       include: {
+        articles: {
+          take: 4,
+          orderBy: {
+            createdAt: "desc",
+          },
+          include: {
+            category: true,
+          },
+        },
         _count: {
           select: {
             articles: true,
