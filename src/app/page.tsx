@@ -8,7 +8,6 @@ const Home = async () => {
   const _getCategories = await getCategories({});
   const categories = _getCategories.data;
 
-  console.log(_getCategories);
   return (
     <Container>
       <Hero />
