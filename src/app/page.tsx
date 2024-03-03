@@ -13,7 +13,7 @@ const Home = async () => {
       <Hero />
       <div className="space-y-6">
         {categories?.map((category) => (
-          <>
+          <div key={category.id}>
             {category.articles.length > 0 && (
               <section key={category.id}>
                 <div className="mb-4">
@@ -35,7 +35,7 @@ const Home = async () => {
                 </div>
               </section>
             )}
-          </>
+          </div>
         ))}
       </div>
     </Container>
