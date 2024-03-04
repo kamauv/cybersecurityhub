@@ -45,11 +45,11 @@ const Navbar = () => {
             isActive={pathname == "/articles"}
             title="Articles"
           />
-          <NavLink
+          {/* <NavLink
             href="/about"
             isActive={pathname == "/about"}
             title="About"
-          />
+          /> */}
 
           <DropdownMenu open={open} onOpenChange={setOpen}>
             <DropdownMenuTrigger className="text-sm font-semibold">
