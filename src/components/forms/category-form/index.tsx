@@ -48,7 +48,7 @@ const CategoryForm = ({
   });
 
   function onFormSubmit(data: z.infer<typeof FormSchema>) {
-    onSubmit(data);
+    onSubmit(data as any);
   }
 
   return (
