@@ -51,7 +51,7 @@ interface Props {
     categorySlug: string;
     content: string;
   }) => void;
-  initialData?: {
+  initialData: {
     title: string;
     categorySlug: string;
     content: string;
@@ -66,12 +66,17 @@ interface Props {
 
 const ArticleForm = ({
   onSubmit,
-  initialData,
+  initialData = {
+    title: "",
+    categorySlug: "",
+    content: "",
+  },
   categories,
   submissionError,
   isFormSubmitting,
 }: Props) => {
   const { toast } = useToast();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -82,7 +87,12 @@ const ArticleForm = ({
   });
 
   function onFormSubmit(data: z.infer<typeof FormSchema>) {
-    onSubmit(data as any);
+    const formdata = {
+      title: data.title,
+      categorySlug: data.categorySlug,
+      content: data.content,
+    };
+    onSubmit(formdata);
   }
 
   return (
