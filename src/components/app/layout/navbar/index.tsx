@@ -22,7 +22,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
+  const [open, setOpen] = React.useState(false);
   const pathname = usePathname();
+
   return (
     <div className="sticky left-0 top-0 flex w-full py-5 border-b shadow z-50 bg-background">
       <Container className="flex justify-between items-center">
@@ -49,33 +51,33 @@ const Navbar = () => {
             title="About"
           />
 
-          <DropdownMenu>
+          <DropdownMenu open={open} onOpenChange={setOpen}>
             <DropdownMenuTrigger className="text-sm font-semibold">
               Admin
             </DropdownMenuTrigger>
             <DropdownMenuContent className="">
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setOpen(false)}>
                 <NavLink
                   href="/admin"
                   isActive={pathname == "/admin"}
                   title="Home"
                 />
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setOpen(false)}>
                 <NavLink
                   href="/admin/categories"
                   isActive={pathname == "/admin/categories"}
                   title="Categories"
                 />
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setOpen(false)}>
                 <NavLink
                   href="/admin/create-article"
                   isActive={pathname == "/admin/create-article"}
                   title="Create Article"
                 />
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setOpen(false)}>
                 <NavLink
                   href="/admin/create-category"
                   isActive={pathname == "/admin/create-category"}

@@ -25,6 +25,7 @@ import { CircleDashed, Pencil, Trash } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
+import DeleteDialog from "./delete-dialog";
 
 interface Props {
   categories: {
@@ -63,7 +64,8 @@ const CategoriesTable = ({ categories }: Props) => {
                   {category.articlesCount}
                 </TableCell>
                 <TableCell className=" space-x-2">
-                  <Dialog open={open} onOpenChange={setOpen}>
+                  <DeleteDialog categorySlug={category.slug} />
+                  {/* <Dialog open={open} onOpenChange={setOpen}>
                     <DialogTrigger asChild>
                       <Button
                         size={"sm"}
@@ -134,7 +136,7 @@ const CategoriesTable = ({ categories }: Props) => {
                         </div>
                       </DialogFooter>
                     </DialogContent>
-                  </Dialog>
+                  </Dialog> */}
 
                   <Link href={`/admin/update-category/${category.slug}`}>
                     <Button

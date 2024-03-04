@@ -24,6 +24,7 @@ import { CircleDashed, Pencil, Trash } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
+import DeleteDialog from "./delete-dialog";
 
 interface Props {
   articles: {
@@ -66,7 +67,8 @@ const ArticlesTable = ({ articles }: Props) => {
                 {article.categoryName}
               </TableCell>
               <TableCell className="flex  space-x-2">
-                <Dialog open={open} onOpenChange={setOpen}>
+                <DeleteDialog articleSlug={article.articleSlug} />
+                {/* <Dialog open={open} onOpenChange={setOpen}>
                   <DialogTrigger asChild>
                     <Button
                       size={"sm"}
@@ -83,8 +85,8 @@ const ArticlesTable = ({ articles }: Props) => {
                         <CircleDashed className="animate-spin mx-auto" />
                       ) : (
                         <DialogDescription className="">
-                          Are you sure you want to delete this article, this
-                          action cannot be undone
+                          {article.articleSlug}- Are you sure you want to delete
+                          this article, this action cannot be undone
                         </DialogDescription>
                       )}
                     </DialogHeader>
@@ -135,7 +137,7 @@ const ArticlesTable = ({ articles }: Props) => {
                       </div>
                     </DialogFooter>
                   </DialogContent>
-                </Dialog>
+                </Dialog> */}
 
                 <Link href={`/admin/update-article/${article.articleSlug}`}>
                   <Button
