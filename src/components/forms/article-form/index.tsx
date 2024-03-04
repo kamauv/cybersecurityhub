@@ -154,7 +154,7 @@ const ArticleForm = ({
             )}
           />
 
-          <FormField
+          {/* <FormField
             control={form.control}
             name="content"
             render={({ field }) => (
@@ -167,7 +167,7 @@ const ArticleForm = ({
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
 
           <RichTextInput
             id="content"

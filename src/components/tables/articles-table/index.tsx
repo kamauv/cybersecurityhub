@@ -48,7 +48,7 @@ const ArticlesTable = ({ articles }: Props) => {
         <TableHeader>
           <TableRow>
             <TableHead className="">Title</TableHead>
-            <TableHead>Content</TableHead>
+            {/* <TableHead>Content</TableHead> */}
             <TableHead>Category</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
@@ -59,13 +59,13 @@ const ArticlesTable = ({ articles }: Props) => {
               <TableCell className="font-medium capitalize">
                 {article.title}
               </TableCell>
-              <TableCell className="font-medium capitalize">
+              {/* <TableCell className="font-medium capitalize">
                 <div dangerouslySetInnerHTML={{ __html: article.content }} />
-              </TableCell>
+              </TableCell> */}
               <TableCell className="font-medium capitalize">
                 {article.categoryName}
               </TableCell>
-              <TableCell className=" space-x-2">
+              <TableCell className="flex  space-x-2">
                 <Dialog open={open} onOpenChange={setOpen}>
                   <DialogTrigger asChild>
                     <Button
