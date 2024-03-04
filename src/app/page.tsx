@@ -1,12 +1,26 @@
+"use client";
+import React from "react";
 import Hero from "@/components/app/hero";
 import SingleArticleCard from "@/components/app/single-article-card";
 import Container from "@/components/ui/container";
 import Image from "next/image";
+
 import { getCategories } from "./actions/categories/get-categories";
 
-const Home = async () => {
-  const _getCategories = await getCategories({});
-  const categories = _getCategories.data;
+const Home = () => {
+  const [categories, setCategories] = React.useState([]);
+
+  React.useEffect(() => {
+    const fetchCategories = async () => {
+      const { data } = await getCategories({});
+      setCategories(data);
+    };
+
+    fetchCategories();
+  }, []);
+
+  // const _getCategories = await getCategories({});
+  // const categories = _getCategories.data;
 
   return (
     <Container>
