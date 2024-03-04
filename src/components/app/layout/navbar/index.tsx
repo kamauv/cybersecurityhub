@@ -29,7 +29,9 @@ const Navbar = () => {
         {/* logo and or site title */}
         <div>
           <Link href={"/"}>
-            <h1 className="font-extrabold text-lg">CyberHub</h1>
+            <h1 className="font-extrabold text-lg">
+              UK Cybersecurity Information Hub
+            </h1>
           </Link>
         </div>
 

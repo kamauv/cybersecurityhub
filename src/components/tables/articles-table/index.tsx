@@ -60,7 +60,7 @@ const ArticlesTable = ({ articles }: Props) => {
                 {article.title}
               </TableCell>
               <TableCell className="font-medium capitalize">
-                {article.content}
+                <div dangerouslySetInnerHTML={{ __html: article.content }} />
               </TableCell>
               <TableCell className="font-medium capitalize">
                 {article.categoryName}

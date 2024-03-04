@@ -27,6 +27,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CircleDashed, RocketIcon } from "lucide-react";
+import RichTextInput from "@/components/ui/rich-text-input";
 
 const FormSchema = z.object({
   title: z.string().min(2, {
@@ -156,6 +157,15 @@ const ArticleForm = ({
                 <FormMessage />
               </FormItem>
             )}
+          />
+
+          <RichTextInput
+            id="content"
+            placeholder="Article content"
+            value={form.watch("content") || ""}
+            onChange={(html) => {
+              form.setValue("content", html);
+            }}
           />
 
           <Button disabled={isFormSubmitting} type="submit">

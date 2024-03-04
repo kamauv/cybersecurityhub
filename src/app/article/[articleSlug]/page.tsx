@@ -47,7 +47,7 @@ const SingleArticlePage = async ({
           />
         </Card>
         <div className="mt-4">
-          <p>{article.content}</p>
+          <div dangerouslySetInnerHTML={{ __html: article.content }} />
         </div>
       </div>
     </Container>
