@@ -51,7 +51,7 @@ interface Props {
     categorySlug: string;
     content: string;
   }) => void;
-  initialData: {
+  initialData?: {
     title: string;
     categorySlug: string;
     content: string;
