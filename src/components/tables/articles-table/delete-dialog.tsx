@@ -59,14 +59,14 @@ const DeleteDialog = ({ articleSlug }: Props) => {
                   articleSlug: articleSlug,
                 });
 
-                console.log(_deleteArticle);
-
                 if (_deleteArticle.isSuccess) {
                   toast({
                     title: "Article deleted successfully",
                   });
                   setOpen(false);
-                  router.push("/admin");
+
+                  window.location.reload();
+                  //   router.push("/admin");
                 } else {
                   toast({
                     variant: "destructive",
