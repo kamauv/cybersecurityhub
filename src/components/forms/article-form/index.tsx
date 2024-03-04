@@ -75,9 +75,9 @@ const ArticleForm = ({
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      title: initialData ? initialData.title : "",
-      categorySlug: initialData ? initialData.categorySlug : "",
-      content: initialData ? initialData.content : "",
+      title: initialData?.title || "",
+      categorySlug: initialData?.categorySlug || "",
+      content: initialData?.content || "",
     },
   });
 
