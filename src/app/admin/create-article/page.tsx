@@ -37,102 +37,101 @@ const CreateArticle = () => {
 
   const { toast } = useToast();
   const router = useRouter();
+  if (typeof window !== "undefined")
+    return (
+      <Container className="pt-6">
+        <FormTitle title="create article" />
 
-  if (!window) return;
-  return (
-    <Container className="pt-6">
-      <FormTitle title="create article" />
+        <ArticleForm
+          onSubmit={async (data) => {
+            setIsFormSubmitting(true);
+            setSubmissionError("");
 
-      <ArticleForm
-        onSubmit={async (data) => {
-          setIsFormSubmitting(true);
-          setSubmissionError("");
+            if (data.imageURL) {
+              // upload image to firebase
+              const imgRef = ref(
+                imageDB,
+                `images/${v4()}-${slugify(data.title)}.${data.imageURL.name
+                  .split(".")
+                  .pop()}`
+              );
 
-          if (data.imageURL) {
-            // upload image to firebase
-            const imgRef = ref(
-              imageDB,
-              `images/${v4()}-${slugify(data.title)}.${data.imageURL.name
-                .split(".")
-                .pop()}`
-            );
+              uploadBytes(imgRef, data.imageURL)
+                .then((value) => {
+                  getDownloadURL(value.ref).then(async (url) => {
+                    setUploadedImageURL(url);
 
-            uploadBytes(imgRef, data.imageURL)
-              .then((value) => {
-                getDownloadURL(value.ref).then(async (url) => {
-                  setUploadedImageURL(url);
-
-                  toast({
-                    title: "Image uploaded successfully",
-                    description: "Redirecting to articles page",
-                  });
-
-                  const _createArticle = await createArticle({
-                    categorySlug: data.categorySlug,
-                    content: data.content,
-                    title: data.title,
-                    imageURL: url,
-                  });
-
-                  if (_createArticle.isSuccess) {
-                    setSubmissionError("");
-                    setIsFormSubmitting(false);
                     toast({
-                      title: "Article created successfully",
+                      title: "Image uploaded successfully",
                       description: "Redirecting to articles page",
                     });
-                    router.push("/admin");
-                  } else {
-                    setSubmissionError(
-                      _createArticle.error
-                        ? _createArticle.error
-                        : "Error creating article"
-                    );
-                    setIsFormSubmitting(false);
-                  }
-                });
-              })
-              .catch((error) => {
-                toast({
-                  title: "Error uploading image",
-                  description: "Something went wrong while uploading image",
-                  variant: "destructive",
-                });
-              });
-          } else {
-            const _createArticle = await createArticle({
-              categorySlug: data.categorySlug,
-              content: data.content,
-              title: data.title,
-            });
 
-            if (_createArticle.isSuccess) {
-              setSubmissionError("");
-              setIsFormSubmitting(false);
-              toast({
-                title: "Article created successfully",
-                description: "Redirecting to articles page",
-              });
-              router.push("/admin");
+                    const _createArticle = await createArticle({
+                      categorySlug: data.categorySlug,
+                      content: data.content,
+                      title: data.title,
+                      imageURL: url,
+                    });
+
+                    if (_createArticle.isSuccess) {
+                      setSubmissionError("");
+                      setIsFormSubmitting(false);
+                      toast({
+                        title: "Article created successfully",
+                        description: "Redirecting to articles page",
+                      });
+                      router.push("/admin");
+                    } else {
+                      setSubmissionError(
+                        _createArticle.error
+                          ? _createArticle.error
+                          : "Error creating article"
+                      );
+                      setIsFormSubmitting(false);
+                    }
+                  });
+                })
+                .catch((error) => {
+                  toast({
+                    title: "Error uploading image",
+                    description: "Something went wrong while uploading image",
+                    variant: "destructive",
+                  });
+                });
             } else {
-              setSubmissionError(
-                _createArticle.error
-                  ? _createArticle.error
-                  : "Error creating article"
-              );
-              setIsFormSubmitting(false);
+              const _createArticle = await createArticle({
+                categorySlug: data.categorySlug,
+                content: data.content,
+                title: data.title,
+              });
+
+              if (_createArticle.isSuccess) {
+                setSubmissionError("");
+                setIsFormSubmitting(false);
+                toast({
+                  title: "Article created successfully",
+                  description: "Redirecting to articles page",
+                });
+                router.push("/admin");
+              } else {
+                setSubmissionError(
+                  _createArticle.error
+                    ? _createArticle.error
+                    : "Error creating article"
+                );
+                setIsFormSubmitting(false);
+              }
             }
-          }
-        }}
-        categories={categories.map((category: any) => ({
-          title: category.name,
-          slug: category.slug,
-        }))}
-        submissionError={submissionError}
-        isFormSubmitting={isFormSubmitting}
-      />
-    </Container>
-  );
+          }}
+          categories={categories.map((category: any) => ({
+            title: category.name,
+            slug: category.slug,
+          }))}
+          submissionError={submissionError}
+          isFormSubmitting={isFormSubmitting}
+        />
+      </Container>
+    );
 };
 
 export default CreateArticle;
