@@ -28,6 +28,8 @@ import { Card } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CircleDashed, RocketIcon } from "lucide-react";
 import RichTextInput from "@/components/ui/rich-text-input";
+import ImageUploadInput from "@/components/app/image-upload";
+import ImageContainer from "@/components/ui/image-container";
 
 const FormSchema = z.object({
   title: z.string().min(2, {
@@ -46,15 +48,18 @@ interface Props {
     title,
     categorySlug,
     content,
+    imageURL,
   }: {
     title: string;
     categorySlug: string;
     content: string;
+    imageURL: File | null;
   }) => void;
   initialData?: {
     title: string;
     categorySlug: string;
     content: string;
+    imageURL?: string;
   };
   categories: {
     title: string;
@@ -62,6 +67,7 @@ interface Props {
   }[];
   submissionError?: string;
   isFormSubmitting?: boolean;
+  isUpdate?: boolean;
 }
 
 const ArticleForm = ({
@@ -70,11 +76,14 @@ const ArticleForm = ({
     title: "",
     categorySlug: "",
     content: "",
+    imageURL: "",
   },
   categories,
   submissionError,
   isFormSubmitting,
+  isUpdate = false,
 }: Props) => {
+  const [selectedImage, setSelectedImage] = React.useState(null);
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -91,7 +100,12 @@ const ArticleForm = ({
       title: data.title,
       categorySlug: data.categorySlug,
       content: data.content,
+      imageURL:
+        !selectedImage && initialData.imageURL
+          ? initialData.imageURL
+          : selectedImage,
     };
+
     onSubmit(formdata);
   }
 
@@ -106,6 +120,21 @@ const ArticleForm = ({
       )}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onFormSubmit)} className=" space-y-6">
+          <ImageUploadInput
+            onChange={(image) => {
+              setSelectedImage(image);
+            }}
+          />
+
+          {initialData.imageURL && !selectedImage && (
+            <ImageContainer
+              alt="image"
+              imageURL={initialData.imageURL}
+              ratio={16 / 9}
+              object="contain"
+            />
+          )}
+
           <FormField
             control={form.control}
             name="title"

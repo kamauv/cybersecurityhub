@@ -9,7 +9,7 @@ export async function getCategories({}: Props) {
     const categories = await prisma.category.findMany({
       include: {
         articles: {
-          take: 4,
+          take: 6,
           orderBy: {
             createdAt: "desc",
           },

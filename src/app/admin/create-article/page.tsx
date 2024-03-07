@@ -9,6 +9,10 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { createArticle } from "@/app/actions/article/create-article";
 import { getCategories } from "@/app/actions/categories/get-categories";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { imageDB } from "@/app/firebasej-config";
+import { v4 } from "uuid";
+import slugify from "slugify";
 
 // this is the page for creating a single article
 
@@ -16,6 +20,7 @@ const CreateArticle = () => {
   const [submissionError, setSubmissionError] = React.useState("");
   const [isFormSubmitting, setIsFormSubmitting] = React.useState(false);
   const [categories, setCategories] = React.useState<any>([]); // this will be fetched from the server
+  const [uploadedImageURL, setUploadedImageURL] = React.useState("");
 
   React.useEffect(() => {
     // fetch categories from the server
@@ -42,27 +47,80 @@ const CreateArticle = () => {
           setIsFormSubmitting(true);
           setSubmissionError("");
 
-          const _createArticle = await createArticle({
-            categorySlug: data.categorySlug,
-            content: data.content,
-            title: data.title,
-          });
-
-          if (_createArticle.isSuccess) {
-            setSubmissionError("");
-            setIsFormSubmitting(false);
-            toast({
-              title: "Article created successfully",
-              description: "Redirecting to articles page",
-            });
-            router.push("/admin");
-          } else {
-            setSubmissionError(
-              _createArticle.error
-                ? _createArticle.error
-                : "Error creating article"
+          if (data.imageURL) {
+            // upload image to firebase
+            const imgRef = ref(
+              imageDB,
+              `images/${v4()}-${slugify(data.title)}.${data.imageURL.name
+                .split(".")
+                .pop()}`
             );
-            setIsFormSubmitting(false);
+
+            uploadBytes(imgRef, data.imageURL)
+              .then((value) => {
+                getDownloadURL(value.ref).then(async (url) => {
+                  setUploadedImageURL(url);
+
+                  toast({
+                    title: "Image uploaded successfully",
+                    description: "Redirecting to articles page",
+                  });
+
+                  const _createArticle = await createArticle({
+                    categorySlug: data.categorySlug,
+                    content: data.content,
+                    title: data.title,
+                    imageURL: url,
+                  });
+
+                  if (_createArticle.isSuccess) {
+                    setSubmissionError("");
+                    setIsFormSubmitting(false);
+                    toast({
+                      title: "Article created successfully",
+                      description: "Redirecting to articles page",
+                    });
+                    router.push("/admin");
+                  } else {
+                    setSubmissionError(
+                      _createArticle.error
+                        ? _createArticle.error
+                        : "Error creating article"
+                    );
+                    setIsFormSubmitting(false);
+                  }
+                });
+              })
+              .catch((error) => {
+                toast({
+                  title: "Error uploading image",
+                  description: "Something went wrong while uploading image",
+                  variant: "destructive",
+                });
+              });
+          } else {
+            const _createArticle = await createArticle({
+              categorySlug: data.categorySlug,
+              content: data.content,
+              title: data.title,
+            });
+
+            if (_createArticle.isSuccess) {
+              setSubmissionError("");
+              setIsFormSubmitting(false);
+              toast({
+                title: "Article created successfully",
+                description: "Redirecting to articles page",
+              });
+              router.push("/admin");
+            } else {
+              setSubmissionError(
+                _createArticle.error
+                  ? _createArticle.error
+                  : "Error creating article"
+              );
+              setIsFormSubmitting(false);
+            }
           }
         }}
         categories={categories.map((category: any) => ({

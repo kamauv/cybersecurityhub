@@ -29,18 +29,19 @@ const SingleArticlePage = async ({
       </div>
     );
   }
+  console.log(article);
   return (
     <Container>
       <div>
         <h1 className="text-4xl mt-4 font-bold mb-4 capitalize">
           {article.title}
         </h1>
-        <p className="text-sm text-gray-600 capitalize">
+        <p className="text-sm text-muted-foreground capitalize">
           {article.category.name}
         </p>
         <Card className="mt-4 overflow-hidden max-w-4xl">
           <ImageContainer
-            imageURL="/placeholder.webp"
+            imageURL={article.imageURL ? article.imageURL : "/placeholder.webp"}
             alt="article image"
             ratio={16 / 9}
             object="cover"
