@@ -38,6 +38,7 @@ const CreateArticle = () => {
   const { toast } = useToast();
   const router = useRouter();
 
+  if (!window) return;
   return (
     <Container className="pt-6">
       <FormTitle title="create article" />
